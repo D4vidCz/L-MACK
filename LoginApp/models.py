@@ -10,7 +10,7 @@ class AlertasInasistencia(models.Model):
     coordinacion = models.ForeignKey('Coordinacion', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'alertas_inasistencia'
 
 
@@ -22,7 +22,7 @@ class Ambiente(models.Model):
     estado = models.CharField(max_length=30)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'ambiente'
 
     def __str__(self):
@@ -123,7 +123,7 @@ class Coordinacion(models.Model):
     correo_coordinacion = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'coordinacion'
 
     def __str__(self):
@@ -298,7 +298,7 @@ class HistoricoIncidentes(models.Model):
     fecha_registro = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'historico_incidentes'
 
 
@@ -329,7 +329,7 @@ class Jornada(models.Model):
     nombre_jornada = models.CharField(max_length=9)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'jornada'
 
     def __str__(self):
@@ -341,7 +341,7 @@ class Modalidad(models.Model):
     nombre_modalidad = models.CharField(max_length=10)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'modalidad'
 
     def __str__(self):
@@ -358,7 +358,7 @@ class Programas(models.Model):
     coordinacion = models.ForeignKey(Coordinacion, models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'programas'
 
     def __str__(self):
@@ -376,7 +376,7 @@ class Recursos(models.Model):
     ambiente = models.ForeignKey(Ambiente, models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'recursos'
 
 
@@ -478,7 +478,7 @@ class RegistroMinuta(models.Model):
     registro_minutacol = models.CharField(max_length=45, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'registro_minuta'
 
 
@@ -487,7 +487,7 @@ class Rol(models.Model):
     nombre_rol = models.CharField(max_length=45)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'rol'
 
     def __str__(self):
@@ -522,7 +522,7 @@ class TipoIncidente(models.Model):
     observacion_inc = models.TextField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tipo_incidente'
 
     def __str__(self):
@@ -535,7 +535,7 @@ class TipoRecurso(models.Model):
     descripcion_tipo = models.CharField(max_length=60, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'tipo_recurso'
 
 

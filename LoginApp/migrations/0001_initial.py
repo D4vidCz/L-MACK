@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'alertas_inasistencia',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'ambiente',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -122,7 +122,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'coordinacion',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -261,7 +261,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'historico_incidentes',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -272,7 +272,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'jornada',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -283,7 +283,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'modalidad',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -296,7 +296,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'programas',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -311,7 +311,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'recursos',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -327,7 +327,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'registro_minuta',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -338,7 +338,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'rol',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -376,7 +376,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'tipo_incidente',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -388,7 +388,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'tipo_recurso',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
