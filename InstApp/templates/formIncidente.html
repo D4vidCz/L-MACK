@@ -198,8 +198,10 @@
                                 <input type="time"
                                        name="hora_incidente"
                                        class="form-control"
-                                       value="{{ incidente.hora_incidente|time:'H:i' }}"
+                                       value="{% if modo_edicion %}{{ incidente.hora_incidente|time:'H:i' }}{% else %}{{ hora_ahora }}{% endif %}"
+                                       readonly
                                        required>
+                                <small class="text-muted">La hora se asigna automáticamente al registrar el incidente</small>
                             </div>
 
                             <div class="col-md-6">

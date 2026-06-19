@@ -586,10 +586,31 @@ def listar_incidentes(request):
 
 
 def crear_incidente(request):
-    ambientes = Ambiente.objects.all().order_by("num_ambiente")
-    tipos = TipoIncidente.objects.all().order_by("tipo_incidente")
     uid = request.session.get('usuario_id')
     usuario = get_object_or_404(Usuario, pk=uid)
+
+    from LoginApp.models import AsignacionAmbiente, Instructor
+    from django.utils import timezone
+    hoy = timezone.localdate()
+
+    instructor = get_object_or_404(Instructor, usuario_id_usuario_id=uid)
+
+    # Filtrar ambientes asignados al instructor
+    asignaciones_qs = AsignacionAmbiente.objects.filter(
+        instructor=instructor,
+        estado='ACTIVO',
+        fecha_inicio__lte=hoy,
+        fecha_fin__gte=hoy
+    )
+    if not asignaciones_qs.exists():
+        asignaciones_qs = AsignacionAmbiente.objects.filter(
+            instructor=instructor,
+            estado='ACTIVO'
+        )
+
+    ambiente_ids = asignaciones_qs.values_list('ambiente_id', flat=True)
+    ambientes = Ambiente.objects.filter(id_ambiente__in=ambiente_ids).order_by("num_ambiente")
+    tipos = TipoIncidente.objects.all().order_by("tipo_incidente")
 
     if request.method == "POST":
         nivel_gravedad = (request.POST.get("nivel_gravedad") or "").strip().title()
@@ -674,7 +695,34 @@ def form_incidente(request):
 
 def editar_incidente(request, incidente_id):
     incidente = get_object_or_404(RegistroIncidente, pk=incidente_id)
-    ambientes = Ambiente.objects.all().order_by("num_ambiente")
+    uid = request.session.get('usuario_id')
+
+    from LoginApp.models import AsignacionAmbiente, Instructor
+    from django.utils import timezone
+    hoy = timezone.localdate()
+
+    instructor = get_object_or_404(Instructor, usuario_id_usuario_id=uid)
+
+    # Filtrar ambientes asignados al instructor
+    asignaciones_qs = AsignacionAmbiente.objects.filter(
+        instructor=instructor,
+        estado='ACTIVO',
+        fecha_inicio__lte=hoy,
+        fecha_fin__gte=hoy
+    )
+    if not asignaciones_qs.exists():
+        asignaciones_qs = AsignacionAmbiente.objects.filter(
+            instructor=instructor,
+            estado='ACTIVO'
+        )
+
+    ambiente_ids = list(asignaciones_qs.values_list('ambiente_id', flat=True))
+    
+    # Incluir el ambiente asignado al incidente por si ya no lo tiene a cargo
+    if incidente.ambiente_id not in ambiente_ids:
+        ambiente_ids.append(incidente.ambiente_id)
+
+    ambientes = Ambiente.objects.filter(id_ambiente__in=ambiente_ids).order_by("num_ambiente")
     tipos = TipoIncidente.objects.all().order_by("tipo_incidente")
 
     if request.method == "POST":

@@ -108,12 +108,8 @@ WSGI_APPLICATION = 'Prueba.wsgi.application'
 if ON_PYTHONANYWHERE:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ.get('DB_NAME', 'tu_usuario_pythonanywhere$mydb'),
-            'USER': os.environ.get('DB_USER', 'tu_usuario_pythonanywhere'),
-            'PASSWORD': os.environ.get('DB_PASSWORD', 'tu_contraseña_mysql_pythonanywhere'),
-            'HOST': os.environ.get('DB_HOST', 'tu_usuario_pythonanywhere.mysql.pythonanywhere-services.com'),
-            'PORT': '3306',
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 else:
