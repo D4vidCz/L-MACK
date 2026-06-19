@@ -13,24 +13,10 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='AlertasInasistencia',
-            fields=[
-                ('id_alerta', models.AutoField(db_comment='Clave primaria. Identificador de la alerta.\n', primary_key=True, serialize=False)),
-                ('aprendiz_id', models.IntegerField(db_comment='Llave forßnea. Relaciona la alerta con el aprendiz.\n')),
-                ('cantidad_fallas', models.IntegerField(db_comment='N·mero acumulado de inasistencias.\n')),
-                ('fecha_alerta', models.DateTimeField(db_comment='Fecha de generaci¾n de la alerta.\n')),
-                ('mensaje', models.TextField(db_comment='Descripci¾n o detalle de la alerta.\n')),
-            ],
-            options={
-                'db_table': 'alertas_inasistencia',
-                'managed': True,
-            },
-        ),
-        migrations.CreateModel(
             name='Ambiente',
             fields=[
-                ('id_ambiente', models.IntegerField(db_comment='Clave primaria. Identificador ·nico del ambiente.\n', primary_key=True, serialize=False)),
-                ('num_ambiente', models.SmallIntegerField(db_comment='N·mero o c¾digo del ambiente fÝsico.\n')),
+                ('id_ambiente', models.IntegerField(db_comment='Clave primaria. Identificador \u00fanico del ambiente.\n', primary_key=True, serialize=False)),
+                ('num_ambiente', models.SmallIntegerField(db_comment='N\u00famero o c\u00f3digo del ambiente f\u00edsico.\n')),
                 ('capacidad', models.SmallIntegerField(db_comment='Cantidad de personas que pueden estar en un ambiente')),
                 ('tipo_ambiente', models.CharField(db_comment='Tipo del ambiente (auditorio, sala, aula, etc.).\n', max_length=45)),
                 ('estado', models.CharField(db_comment='Estado actual del ambiente (disponible, ocupado, mantenimiento, etc.).\n', max_length=30)),
@@ -116,9 +102,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Coordinacion',
             fields=[
-                ('id_coordinacion', models.AutoField(db_comment='Clave primaria. Identificador de la coordinaci¾n.\n', primary_key=True, serialize=False)),
-                ('nombre_coordinacion', models.CharField(db_comment='Nombre de la coordinaci¾n (ej. tecnologia e innovacion).\n', max_length=45)),
-                ('correo_coordinacion', models.CharField(db_comment='Correo electr¾nico institucional de la coordinaci¾n.\n\n', max_length=30)),
+                ('id_coordinacion', models.AutoField(db_comment='Clave primaria. Identificador de la coordinaci\u00f3n.\n', primary_key=True, serialize=False)),
+                ('nombre_coordinacion', models.CharField(db_comment='Nombre de la coordinaci\u00f3n (ej. tecnologia e innovacion).\n', max_length=45)),
+                ('correo_coordinacion', models.CharField(db_comment='Correo electr\u00f3nico institucional de la coordinaci\u00f3n.\n\n', max_length=30)),
             ],
             options={
                 'db_table': 'coordinacion',
@@ -253,22 +239,10 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='HistoricoIncidentes',
-            fields=[
-                ('id_historico', models.AutoField(db_comment='Clave primaria. Identificador del historial del incidente.\n', primary_key=True, serialize=False)),
-                ('descripcion', models.TextField(blank=True, db_comment='Descripci¾n de los hechos o seguimiento.\n', null=True)),
-                ('fecha_registro', models.DateTimeField(db_comment='Fecha del registro en el historial.\n\n')),
-            ],
-            options={
-                'db_table': 'historico_incidentes',
-                'managed': True,
-            },
-        ),
-        migrations.CreateModel(
             name='Jornada',
             fields=[
                 ('id_jornada', models.IntegerField(db_comment='Clave primaria. Identificador de la jornada.\n', primary_key=True, serialize=False)),
-                ('nombre_jornada', models.CharField(db_comment='Nombre de la jornada (ma±ana, tarde, noche).\n\n', max_length=9)),
+                ('nombre_jornada', models.CharField(db_comment='Nombre de la jornada (ma\u00f1ana, tarde, noche).\n\n', max_length=9)),
             ],
             options={
                 'db_table': 'jornada',
@@ -289,44 +263,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Programas',
             fields=[
-                ('id_programas', models.IntegerField(db_comment='Clave primaria. Identificador del programa acadÚmico.\n', primary_key=True, serialize=False)),
+                ('id_programas', models.IntegerField(db_comment='Clave primaria. Identificador del programa acad\u00e9mico.\n', primary_key=True, serialize=False)),
                 ('nombre_programa', models.CharField(db_comment='Nombre del programa.\n', max_length=50)),
-                ('nivel_formacion', models.CharField(db_comment='Nivel de formaci¾n (tecn¾logo, tÚcnico, etc.).\n', max_length=30)),
-                ('duracion', models.CharField(db_comment='Duraci¾n estimada del programa.\n', max_length=50)),
+                ('nivel_formacion', models.CharField(db_comment='Nivel de formaci\u00f3n (tecn\u00f3logo, t\u00e9cnico, etc.).\n', max_length=30)),
+                ('duracion', models.CharField(db_comment='Duraci\u00f3n estimada del programa.\n', max_length=50)),
+                ('jornada', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.jornada')),
+                ('modalidad', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.modalidad')),
+                ('coordinacion', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.coordinacion')),
             ],
             options={
                 'db_table': 'programas',
-                'managed': True,
-            },
-        ),
-        migrations.CreateModel(
-            name='Recursos',
-            fields=[
-                ('id_recurso', models.AutoField(db_comment='Clave primaria. Identificador del recurso.\n', primary_key=True, serialize=False)),
-                ('serial_recurso', models.CharField(db_comment='Serial fÝsico o interno del recurso.\n', max_length=100)),
-                ('num_recurso', models.IntegerField(db_comment='Nombre del recurso en el ambiente.\n')),
-                ('nombre_recurso', models.CharField(db_comment='Nombre del recurso.\n', max_length=60)),
-                ('estado', models.CharField(blank=True, db_comment='Estado del recurso (operativo, da±ado, en mantenimiento).\n', max_length=16, null=True)),
-                ('observacion', models.TextField(blank=True, db_comment='Observacion hacia algun recurso.', null=True)),
-            ],
-            options={
-                'db_table': 'recursos',
-                'managed': True,
-            },
-        ),
-        migrations.CreateModel(
-            name='RegistroMinuta',
-            fields=[
-                ('id_minuta', models.AutoField(db_comment='Clave primaria. Identificador del registro de minuta.\n', primary_key=True, serialize=False)),
-                ('fecha_hora_recibo', models.DateTimeField(db_comment='Fecha y hora de recibo del ambiente.\n')),
-                ('fecha_hora_entrega', models.DateTimeField(db_comment='Fecha y hora de entrega.\n')),
-                ('novedad', models.TextField(blank=True, db_comment='Novedad o eventualidad ocurrida.\n', null=True)),
-                ('descripcion_min', models.TextField(blank=True, db_comment='Observaciones generales.\n', null=True)),
-                ('estado', models.TextField(db_comment='Estado general del ambiente al momento.\n')),
-                ('registro_minutacol', models.CharField(blank=True, max_length=45, null=True)),
-            ],
-            options={
-                'db_table': 'registro_minuta',
                 'managed': True,
             },
         ),
@@ -372,7 +318,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id_tipo_inc', models.IntegerField(db_comment='Clave primaria. Identificador del tipo de incidente.\n', primary_key=True, serialize=False)),
                 ('tipo_incidente', models.CharField(db_comment='Nombre del tipo.\n', max_length=45)),
-                ('observacion_inc', models.TextField(db_comment='Observaci¾n adicional.\n\n')),
+                ('observacion_inc', models.TextField(db_comment='Observaci\u00f3n adicional.\n\n')),
             ],
             options={
                 'db_table': 'tipo_incidente',
@@ -384,7 +330,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id_tipo_recurso', models.IntegerField(db_comment='Clave primaria. Identificador del tipo de recurso.\n', primary_key=True, serialize=False)),
                 ('recurso_tipo', models.CharField(db_comment='Nombre del tipo (ej. PC, proyector, aire, etc.).\n', max_length=45)),
-                ('descripcion_tipo', models.CharField(blank=True, db_comment='Descripci¾n adicional.\n\n', max_length=60, null=True)),
+                ('descripcion_tipo', models.CharField(blank=True, db_comment='Descripci\u00f3n adicional.\n\n', max_length=60, null=True)),
             ],
             options={
                 'db_table': 'tipo_recurso',
@@ -400,9 +346,9 @@ class Migration(migrations.Migration):
                 ('p_apellido', models.CharField(db_comment='Primer apellido.\n', max_length=45)),
                 ('s_apellido', models.CharField(blank=True, db_comment='Segundo apellido.\n', max_length=45, null=True)),
                 ('tipo_documento', models.CharField(db_comment='Tipo de documento.\n', max_length=4)),
-                ('num_documento', models.IntegerField(db_comment='N·mero de documento.\n')),
+                ('num_documento', models.IntegerField(db_comment='N\u00famero de documento.\n')),
                 ('correo', models.CharField(db_comment='Correo institucional.\n', max_length=100)),
-                ('contrasena', models.CharField(db_column='Contraseña', max_length=100)),
+                ('contrasena', models.CharField(db_column='Contrase\u00f1a', max_length=100)),
             ],
             options={
                 'db_table': 'usuario',
@@ -423,8 +369,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='GuardaSeguridad',
             fields=[
-                ('usuario_id_usuario', models.OneToOneField(db_column='Usuario_id_usuario', db_comment='Clave primaria y forßnea. Usuario que cumple funciones de guarda de seguridad.\n', on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='LoginApp.usuario')),
-                ('turno', models.CharField(db_comment='Turno del guarda(ej. ma±ana, tarde, etc...)', max_length=6)),
+                ('usuario_id_usuario', models.OneToOneField(db_column='Usuario_id_usuario', db_comment='Clave primaria y for\u00e1nea. Usuario que cumple funciones de guarda de seguridad.\n', on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='LoginApp.usuario')),
+                ('turno', models.CharField(db_comment='Turno del guarda(ej. ma\u00f1ana, tarde, etc...)', max_length=6)),
                 ('fecha_ingreso', models.DateField(db_comment='Fecha de ingreso laboral del guarda.\n')),
                 ('estado', models.CharField(db_comment='Estado laboral del guarda (activo/inactivo).\n\n', max_length=8)),
             ],
@@ -448,9 +394,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Aprendiz',
             fields=[
-                ('usuario_id_usuario', models.OneToOneField(db_column='Usuario_id_usuario', db_comment='Llave primaria y forßnea. Identificador del aprendiz (usuario base).\n', on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='LoginApp.usuario')),
+                ('usuario_id_usuario', models.OneToOneField(db_column='Usuario_id_usuario', db_comment='Llave primaria y for\u00e1nea. Identificador del aprendiz (usuario base).\n', on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='LoginApp.usuario')),
                 ('ficha_idficha', models.ForeignKey(blank=True, db_column='ficha_idficha', null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.ficha')),
-                ('programas_id_programas', models.ForeignKey(blank=True, db_column='programas_id_programas', db_comment='Llave forßnea. Programa de formaci¾n del aprendiz.\n', null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.programas')),
+                ('programas_id_programas', models.ForeignKey(blank=True, db_column='programas_id_programas', db_comment='Llave for\u00e1nea. Programa de formaci\u00f3n del aprendiz.\n', null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.programas')),
             ],
             options={
                 'db_table': 'aprendiz',
@@ -460,8 +406,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Coordinador',
             fields=[
-                ('usuario_id_usuario', models.OneToOneField(db_column='Usuario_id_usuario', db_comment='Llave primaria y forßnea. Usuario que tiene el rol de coordinador.\n', on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='LoginApp.usuario')),
-                ('coordinacion_id_coordinacion', models.ForeignKey(blank=True, db_column='coordinacion_id_coordinacion', db_comment='Llave forßnea. Relaciona con la coordinaci¾n que lidera.\n\n', null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.coordinacion')),
+                ('usuario_id_usuario', models.OneToOneField(db_column='Usuario_id_usuario', db_comment='Llave primaria y for\u00e1nea. Usuario que tiene el rol de coordinador.\n', on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='LoginApp.usuario')),
+                ('coordinacion_id_coordinacion', models.ForeignKey(blank=True, db_column='coordinacion_id_coordinacion', db_comment='Llave for\u00e1nea. Relaciona con la coordinaci\u00f3n que lidera.\n\n', null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.coordinacion')),
             ],
             options={
                 'db_table': 'coordinador',
@@ -471,14 +417,46 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Instructor',
             fields=[
-                ('usuario_id_usuario', models.OneToOneField(db_column='Usuario_id_usuario', db_comment='Llave primaria y forßnea. Usuario que act·a como instructor.\n', on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='LoginApp.usuario')),
-                ('email', models.CharField(db_comment='Correo electr¾nico institucional.\n', max_length=100)),
-                ('telefono', models.CharField(db_comment='TelÚfono de contacto.\n', max_length=20)),
+                ('usuario_id_usuario', models.OneToOneField(db_column='Usuario_id_usuario', db_comment='Llave primaria y for\u00e1nea. Usuario que act\u00faa como instructor.\n', on_delete=django.db.models.deletion.DO_NOTHING, primary_key=True, serialize=False, to='LoginApp.usuario')),
+                ('email', models.CharField(db_comment='Correo electr\u00f3nico institucional.\n', max_length=100)),
+                ('telefono', models.CharField(db_comment='Tel\u00e9fono de contacto.\n', max_length=20)),
                 ('estado', models.CharField(db_comment='Estado laboral (activo, inactivo).\n', max_length=8)),
-                ('coordinacion_id_coordinacion', models.ForeignKey(blank=True, db_column='coordinacion_id_coordinacion', db_comment='Coordinaci¾n a la que pertenece.\n', null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.coordinacion')),
+                ('coordinacion_id_coordinacion', models.ForeignKey(blank=True, db_column='coordinacion_id_coordinacion', db_comment='Coordinaci\u00f3n a la que pertenece.\n', null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.coordinacion')),
             ],
             options={
                 'db_table': 'instructor',
+                'managed': True,
+            },
+        ),
+        migrations.CreateModel(
+            name='AlertasInasistencia',
+            fields=[
+                ('id_alerta', models.AutoField(db_comment='Clave primaria. Identificador de la alerta.\n', primary_key=True, serialize=False)),
+                ('aprendiz_id', models.IntegerField(db_comment='Llave for\u00e1nea. Relaciona la alerta con el aprendiz.\n')),
+                ('cantidad_fallas', models.IntegerField(db_comment='N\u00famero acumulado de inasistencias.\n')),
+                ('fecha_alerta', models.DateTimeField(db_comment='Fecha de generaci\u00f3n de la alerta.\n')),
+                ('mensaje', models.TextField(db_comment='Descripci\u00f3n o detalle de la alerta.\n')),
+                ('coordinacion', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.coordinacion')),
+            ],
+            options={
+                'db_table': 'alertas_inasistencia',
+                'managed': True,
+            },
+        ),
+        migrations.CreateModel(
+            name='Recursos',
+            fields=[
+                ('id_recurso', models.AutoField(db_comment='Clave primaria. Identificador del recurso.\n', primary_key=True, serialize=False)),
+                ('serial_recurso', models.CharField(db_comment='Serial f\u00edsico o interno del recurso.\n', max_length=100)),
+                ('num_recurso', models.IntegerField(db_comment='Nombre del recurso en el ambiente.\n')),
+                ('nombre_recurso', models.CharField(db_comment='Nombre del recurso.\n', max_length=60)),
+                ('estado', models.CharField(blank=True, db_comment='Estado del recurso (operativo, da\u00f1ado, en mantenimiento).\n', max_length=16, null=True)),
+                ('observacion', models.TextField(blank=True, db_comment='Observacion hacia algun recurso.', null=True)),
+                ('tipo_recurso', models.ForeignKey(db_column='tipo_recurso', on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.tiporecurso')),
+                ('ambiente', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.ambiente')),
+            ],
+            options={
+                'db_table': 'recursos',
                 'managed': True,
             },
         ),
@@ -487,7 +465,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id_inasistencia', models.AutoField(db_comment='Clave primaria. Identificador del registro.\n', primary_key=True, serialize=False)),
                 ('fecha_inasistencia', models.DateField(db_comment='Fecha del registro de asistencia.\n')),
-                ('estado_inasistencia', models.CharField(db_comment='Estado: S (asisti¾), R (retraso), N (no asistio).\n', max_length=1)),
+                ('estado_inasistencia', models.CharField(db_comment='Estado: S (asisti\u00f3), R (retraso), N (no asistio).\n', max_length=1)),
                 ('jornada', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.jornada')),
                 ('aprendiz_usuario_id_usuario', models.ForeignKey(db_column='aprendiz_Usuario_id_usuario', on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.aprendiz')),
                 ('instructor_usuario_id_usuario', models.ForeignKey(db_column='instructor_Usuario_id_usuario', on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.instructor')),
@@ -502,8 +480,8 @@ class Migration(migrations.Migration):
             name='RegistroIncidente',
             fields=[
                 ('id_incidente', models.AutoField(db_comment='Clave primaria. Identificador del incidente.\n\n', primary_key=True, serialize=False)),
-                ('descripcion', models.TextField(blank=True, db_comment='Descripci¾n general del incidente.\n', null=True)),
-                ('fecha_incidente', models.DateField(db_comment='Fecha en que ocurri¾.\n')),
+                ('descripcion', models.TextField(blank=True, db_comment='Descripci\u00f3n general del incidente.\n', null=True)),
+                ('fecha_incidente', models.DateField(db_comment='Fecha en que ocurri\u00f3.\n')),
                 ('hora_incidente', models.TimeField(db_comment='Hora en que ocurrio.')),
                 ('ambiente', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.ambiente')),
                 ('tipo_inc', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.tipoincidente')),
@@ -526,6 +504,40 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'traslado_recurso',
+                'managed': True,
+            },
+        ),
+        migrations.CreateModel(
+            name='HistoricoIncidentes',
+            fields=[
+                ('id_historico', models.AutoField(db_comment='Clave primaria. Identificador del historial del incidente.\n', primary_key=True, serialize=False)),
+                ('descripcion', models.TextField(blank=True, db_comment='Descripci\u00f3n de los hechos o seguimiento.\n', null=True)),
+                ('fecha_registro', models.DateTimeField(db_comment='Fecha del registro en el historial.\n\n')),
+                ('incidente', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.registroincidente')),
+                ('ambiente', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.ambiente')),
+                ('tipo_incidente', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.tipoincidente')),
+            ],
+            options={
+                'db_table': 'historico_incidentes',
+                'managed': True,
+            },
+        ),
+        migrations.CreateModel(
+            name='RegistroMinuta',
+            fields=[
+                ('id_minuta', models.AutoField(db_comment='Clave primaria. Identificador del registro de minuta.\n', primary_key=True, serialize=False)),
+                ('fecha_hora_recibo', models.DateTimeField(db_comment='Fecha y hora de recibo del ambiente.\n')),
+                ('fecha_hora_entrega', models.DateTimeField(db_comment='Fecha y hora de entrega.\n')),
+                ('novedad', models.TextField(blank=True, db_comment='Novedad o eventualidad ocurrida.\n', null=True)),
+                ('descripcion_min', models.TextField(blank=True, db_comment='Observaciones generales.\n', null=True)),
+                ('estado', models.TextField(db_comment='Estado general del ambiente al momento.\n')),
+                ('registro_minutacol', models.CharField(blank=True, max_length=45, null=True)),
+                ('ambiente', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.ambiente')),
+                ('guarda_seguridad_usuario_id_usuario', models.ForeignKey(db_column='guarda_seguridad_Usuario_id_usuario', on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.guardaseguridad')),
+                ('responsable', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='LoginApp.instructor')),
+            ],
+            options={
+                'db_table': 'registro_minuta',
                 'managed': True,
             },
         ),
