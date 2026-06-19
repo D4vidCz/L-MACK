@@ -327,7 +327,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'registro_inasistencia',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -345,7 +345,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'registro_incidente',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
@@ -435,7 +435,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'traslado_recurso',
-                'managed': False,
+                'managed': True,
             },
         ),
         migrations.CreateModel(
