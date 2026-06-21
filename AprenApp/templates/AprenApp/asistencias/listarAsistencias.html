@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Inasistencias - L-MACK</title>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
     <meta http-equiv="Pragma" content="no-cache"/>
@@ -152,11 +153,7 @@
                     {% endfor %}
                 {% endif %}
 
-                <!-- Toolbar -->
-                <div class="toolbar">
-                    <a href="{% url 'aprendiz:exportar_asistencias_pdf' %}" class="btn btn-primary">📄 Exportar PDF</a>
-                    <a href="{% url 'aprendiz:exportar_asistencias_excel' %}" class="btn btn-success">📊 Exportar Excel</a>
-                </div>
+
 
                 <!-- Filtro -->
                 <div style="margin-bottom: 15px;">

@@ -727,3 +727,229 @@ body {
 .layout-container .sidebar {
     z-index: 1000;
 }
+
+/* ============================================
+   RESPONSIVIDAD MÓVIL GLOBAL (L-MACK)
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Layout */
+    .layout-container {
+        flex-direction: column !important;
+        min-height: auto !important;
+    }
+
+    /* Barra Lateral -> Navbar Superior en Móvil */
+    .sidebar {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        z-index: 999 !important;
+    }
+
+    .sidebar-header {
+        padding: 15px 20px !important;
+        text-align: center !important;
+    }
+
+    .sidebar-header h3 {
+        font-size: 20px !important;
+        justify-content: center !important;
+    }
+
+    .sidebar-nav {
+        padding: 10px 15px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        flex: none !important;
+    }
+
+    .sidebar-nav a {
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+        border-left: none !important;
+        border-bottom: 3px solid transparent !important;
+        border-radius: 4px !important;
+        background-color: rgba(255, 255, 255, 0.08) !important;
+        display: inline-block !important;
+        white-space: nowrap !important;
+        margin: 0 !important;
+    }
+
+    .sidebar-nav a:hover, 
+    .sidebar-nav a[style*="background"] {
+        padding-left: 12px !important;
+        background-color: rgba(255, 255, 255, 0.2) !important;
+        border-bottom-color: var(--light-green) !important;
+        color: white !important;
+    }
+
+    .sidebar-footer {
+        padding: 10px 15px !important;
+        margin-top: 0 !important;
+        width: 100% !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+
+    .sidebar-footer form {
+        width: 100% !important;
+        max-width: 280px !important;
+    }
+
+    .sidebar-footer .btn-logout {
+        width: 100% !important;
+        padding: 8px 15px !important;
+        font-size: 14px !important;
+    }
+
+    /* Contenido Principal */
+    .main-content {
+        margin-left: 0 !important;
+        padding: 15px !important;
+        width: 100% !important;
+        min-height: auto !important;
+    }
+
+    .content-wrapper {
+        padding: 15px !important;
+    }
+
+    .content {
+        margin: 10px !important;
+        padding: 15px !important;
+    }
+
+    .form-header {
+        margin: -15px -15px 15px -15px !important;
+        padding: 15px 20px !important;
+    }
+
+    .form-header h2 {
+        font-size: 20px !important;
+    }
+
+    /* Tablas Responsivas */
+    .table-container, 
+    .table-responsive {
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        margin-bottom: 15px !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+    }
+
+    table, 
+    .ui-datatable, 
+    .ui-datatable table {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* Formularios y Grillas */
+    .dashboard-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    .form-actions, 
+    .btn-group-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding-top: 15px !important;
+    }
+
+    .form-actions .btn, 
+    .btn-group-actions .btn, 
+    .form-actions a, 
+    .btn-group-actions a {
+        width: 100% !important;
+        margin: 0 !important;
+        text-align: center !important;
+    }
+
+    .ui-panelgrid td {
+        display: block !important;
+        width: 100% !important;
+        padding: 8px 0 !important;
+    }
+
+    .ui-panelgrid .label-col {
+        width: 100% !important;
+        font-weight: 600 !important;
+        margin-bottom: 3px !important;
+    }
+
+    /* Landing Page Responsivo */
+    .landing-header {
+        flex-direction: column !important;
+        gap: 15px !important;
+        text-align: center !important;
+        padding: 15px !important;
+    }
+
+    .landing-header-buttons {
+        justify-content: center !important;
+        width: 100% !important;
+    }
+
+    .landing-header-btn {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    .landing-content {
+        padding: 40px 15px !important;
+    }
+
+    .landing-title {
+        font-size: 26px !important;
+    }
+
+    .landing-subtitle {
+        font-size: 15px !important;
+        margin-bottom: 30px !important;
+    }
+
+    .landing-btn {
+        width: 100% !important;
+        text-align: center !important;
+        padding: 12px 25px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar-nav {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 5px 10px !important;
+    }
+
+    .sidebar-nav a {
+        text-align: center !important;
+        width: 100% !important;
+        margin-bottom: 3px !important;
+    }
+
+    .login-card {
+        padding: 20px !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
+    }
+
+    .login-header h2 {
+        font-size: 26px !important;
+    }
+}
+
