@@ -150,24 +150,24 @@
                     </p>
 
                     <div class="alert alert-secondary">
-                        <strong class="d-block mb-2 text-dark">Columnas del CSV requeridas (con cabecera obligatoria):</strong>
-                        <code>p_nombre, s_nombre, p_apellido, s_apellido, tipo_documento, num_documento, correo, contrasena, rol</code>
+                        <strong class="d-block mb-2 text-dark">Estructura de Columnas del CSV (cabecera obligatoria, orden recomendado para coincidir con la BD):</strong>
+                        <code class="d-block text-break mb-3" style="font-size: 13px;">p_nombre,s_nombre,p_apellido,s_apellido,tipo_documento,num_documento,correo,contrasena,rol,programa,num_ficha,telefono,coordinacion,turno,fecha_ingreso,estado</code>
                         
-                        <strong class="d-block mt-3 mb-2 text-dark">Columnas opcionales/adicionales según el rol:</strong>
+                        <strong class="d-block mt-3 mb-2 text-dark">Campos opcionales/adicionales que se completan según el rol del usuario:</strong>
                         <ul class="mb-0 ps-3">
-                            <li><strong>aprendiz</strong>: admite la columna <code>num_ficha</code> (número de ficha válido) y el <code>programa</code> de formación.</li>
-                            <li><strong>instructor</strong> admite <code>coordinacion_id</code>, el <code>telefono</code>, el <code>correo</code> que utilices frecuentemente y tu <code>estado</code>.</li>
-                            <li><strong>guarda</strong>: admite la columna <code>turno</code> (máximo 6 caracteres), la <code>fecha_ingreso</code> (AAAA-MM-DD) y el <code>estado</code>.</li>
-                            <li><strong>administador</strong>: admite la <code>coordinación</code> a la que perteneces </li>
+                            <li><strong>aprendiz</strong>: se asocian las columnas <code>programa</code> (nombre o ID del programa) y <code>num_ficha</code> (ficha de formación).</li>
+                            <li><strong>instructor</strong>: se asocian las columnas <code>telefono</code>, <code>coordinacion</code> (nombre o ID de la coordinación) y <code>estado</code> (Activo/Inactivo).</li>
+                            <li><strong>guarda</strong>: se asocian las columnas <code>turno</code> (Mañana, Tarde, Noche), <code>fecha_ingreso</code> (AAAA-MM-DD) y <code>estado</code> (Activo/Inactivo).</li>
+                            <li><strong>coordinador / administrador</strong>: se asocia la columna <code>coordinacion</code> (nombre o ID de la coordinación).</li>
                         </ul>
                     </div>
 
                     <div class="mb-4">
                         <a class="btn btn-outline-secondary btn-sm"
-                           href="data:text/csv;charset=utf-8,p_nombre,s_nombre,p_apellido,s_apellido,tipo_documento,num_documento,correo,contrasena,rol,num_ficha,programa,coordinacion,telefono,estado,turno,fecha_ingreso%0ACarlos,Andres,Ramirez,Pedraza,CC,1023456789,carlos@sena.edu.co,Sena2026*,aprendiz,2271021,analisis%20y%20desarrollo%20de%20software,,,,,%0APaula,,Arenas,Perez,CC,987654321,paula@sena.edu.co,Instructor2026*,instructor,,,Sistemas,3124567890,Activo,,%0AJorge,Luis,Bermudez,Castro,CC,1030405060,jorge@sena.edu.co,Guarda2026*,guarda,,,,,Activo,Ma%C3%B1ana,2026-06-15"
+                           href="data:text/csv;charset=utf-8,p_nombre,s_nombre,p_apellido,s_apellido,tipo_documento,num_documento,correo,contrasena,rol,programa,num_ficha,telefono,coordinacion,turno,fecha_ingreso,estado%0ACarlos,Andres,Ramirez,Pedraza,CC,1023456789,carlos@sena.edu.co,Sena2026*,aprendiz,analisis%20y%20desarrollo%20de%20software,2271021,,,,,%0APaula,,Arenas,Perez,CC,987654321,paula@sena.edu.co,Instructor2026*,instructor,,,3124567890,Sistemas,,,Activo%0AJorge,Luis,Bermudez,Castro,CC,1030405060,jorge@sena.edu.co,Guarda2026*,guarda,,,,,Ma%C3%B1ana,2026-06-15,Activo"
                            download="plantilla_usuarios.csv">
-                            📄 Descargar Plantilla CSV de Ejemplo
-                        </a>
+                             📄 Descargar Plantilla CSV de Ejemplo
+                         </a>
                     </div>
 
                     <form method="post" enctype="multipart/form-data">
