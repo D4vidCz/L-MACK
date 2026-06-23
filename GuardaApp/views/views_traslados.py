@@ -118,16 +118,22 @@ def crear_traslado(request):
             inst_origen_id = request.POST.get("instructor_origen_id")
             inst_destino_id = request.POST.get("instructor_destino_id")
             
+            ambiente_destino_id = int(request.POST.get("ambiente_destino"))
             TrasladoRecurso.objects.create(
                 recurso=recurso,
                 ambiente_origen=recurso.ambiente,
-                ambiente_destino=int(request.POST.get("ambiente_destino")),
+                ambiente_destino=ambiente_destino_id,
                 fecha_traslado=fecha_traslado,
                 observacion=(request.POST.get("observacion") or "").strip() or None,
                 instructor_origen_id=int(inst_origen_id) if inst_origen_id else None,
                 instructor_destino_id=int(inst_destino_id) if inst_destino_id else None,
                 tiempo_prestamo=(request.POST.get("tiempo_prestamo") or "").strip() or None,
             )
+            
+            # Cambiar el recurso a su ambiente de destino
+            recurso.ambiente_id = ambiente_destino_id
+            recurso.save(update_fields=['ambiente'])
+
             messages.success(request, "Traslado creado correctamente.")
             return _replace_redirect('guarda:guarda_traslados')
         except (TypeError, ValueError, IntegrityError) as exc:
@@ -156,15 +162,29 @@ def editar_traslado(request, traslado_id):
             inst_origen_id = request.POST.get("instructor_origen_id")
             inst_destino_id = request.POST.get("instructor_destino_id")
             
+            # Primero, si el recurso cambió, regresamos el recurso anterior a su origen
+            if traslado.recurso != recurso:
+                old_recurso = traslado.recurso
+                old_recurso.ambiente = traslado.ambiente_origen
+                old_recurso.save(update_fields=['ambiente'])
+
+            ambiente_destino_id = int(request.POST.get("ambiente_destino"))
+
             traslado.recurso = recurso
             traslado.ambiente_origen = recurso.ambiente
-            traslado.ambiente_destino = int(request.POST.get("ambiente_destino"))
+            traslado.ambiente_destino = ambiente_destino_id
             traslado.fecha_traslado = _fecha_traslado_desde_post(request.POST.get("fecha_traslado"))
             traslado.observacion = (request.POST.get("observacion") or "").strip() or None
             traslado.instructor_origen_id = int(inst_origen_id) if inst_origen_id else None
             traslado.instructor_destino_id = int(inst_destino_id) if inst_destino_id else None
             traslado.tiempo_prestamo = (request.POST.get("tiempo_prestamo") or "").strip() or None
             traslado.save()
+
+            # Ahora actualizamos el recurso actual al nuevo destino
+            if traslado.estado != 'Devuelto':
+                recurso.ambiente_id = ambiente_destino_id
+                recurso.save(update_fields=['ambiente'])
+
             messages.success(request, "Traslado actualizado correctamente.")
             return _replace_redirect('guarda:guarda_traslados')
         except (TypeError, ValueError, IntegrityError) as exc:
@@ -231,6 +251,11 @@ def devolver_recurso_guarda(request, traslado_id):
     traslado.estado = 'Devuelto'
     traslado.save(update_fields=['estado'])
 
-    messages.success(request, f"El recurso '{traslado.recurso.nombre_recurso}' ha sido marcado como Devuelto.")
+    # Restablecer el recurso a su ambiente de origen
+    recurso = traslado.recurso
+    recurso.ambiente = traslado.ambiente_origen
+    recurso.save(update_fields=['ambiente'])
+
+    messages.success(request, f"El recurso '{traslado.recurso.nombre_recurso}' ha sido marcado como Devuelto y regresado a su ambiente original (Ambiente {traslado.ambiente_origen.num_ambiente}).")
     return _replace_redirect('guarda:guarda_traslados')
 

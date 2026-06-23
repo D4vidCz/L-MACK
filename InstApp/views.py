@@ -897,8 +897,13 @@ def devolver_recurso(request, traslado_id):
     traslado = get_object_or_404(TrasladoRecurso, pk=traslado_id)
     traslado.estado = 'Devuelto'
     traslado.save(update_fields=['estado'])
+
+    # Restablecer el recurso a su ambiente de origen
+    recurso = traslado.recurso
+    recurso.ambiente = traslado.ambiente_origen
+    recurso.save(update_fields=['ambiente'])
     
-    messages.success(request, f"El recurso '{traslado.recurso.nombre_recurso}' ha sido marcado como Devuelto.")
+    messages.success(request, f"El recurso '{traslado.recurso.nombre_recurso}' ha sido marcado como Devuelto y regresado a su ambiente original (Ambiente {traslado.ambiente_origen.num_ambiente}).")
     return redirect('instructor:listar_traslados')
 
 
