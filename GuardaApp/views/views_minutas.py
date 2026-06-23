@@ -191,6 +191,9 @@ def crear_minuta(request):
                 fecha_hora_entrega = timezone.make_aware(dt_entrega, timezone.get_current_timezone())
             else:
                 fecha_hora_entrega = ahora
+
+            if fecha_hora_entrega < fecha_hora_recibo:
+                raise ValueError("La fecha y hora de entrega no puede ser anterior a la de recibido.")
         except (TypeError, ValueError) as e:
             messages.error(request, f"Datos o formato de fecha inválidos: {str(e)}")
             return _render_guarda(
@@ -319,6 +322,9 @@ def editar_minuta(request, minuta_id):
             if entrega_str:
                 dt_entrega = datetime.strptime(entrega_str, "%Y-%m-%dT%H:%M")
                 minuta.fecha_hora_entrega = timezone.make_aware(dt_entrega, timezone.get_current_timezone())
+
+            if minuta.fecha_hora_entrega < minuta.fecha_hora_recibo:
+                raise ValueError("La fecha y hora de entrega no puede ser anterior a la de recibido.")
 
             # Obtener y validar el ambiente seleccionado
             ambiente_id = request.POST.get("ambiente_id")

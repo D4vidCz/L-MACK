@@ -52,6 +52,7 @@
                     <label class="form-label fw-bold">Fecha y hora de recibido</label>
                     <input class="form-control" type="datetime-local" 
                            name="fecha_hora_recibo" 
+                           id="fecha_hora_recibo"
                            value="{% if minuta %}{{ minuta.fecha_hora_recibo|date:'Y-m-d\TH:i' }}{% else %}{{ fecha_hora_recibo_def }}{% endif %}" 
                            readonly 
                            style="background-color: #e9ecef; pointer-events: none;">
@@ -227,6 +228,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // En modo edición o si ya viene cargado, resolver el ambiente al cargar la página
     if (responsableSelect.value) {
         resolverAmbiente(responsableSelect.value);
+    }
+
+    // Validación de fecha de entrega >= fecha de recibo
+    const fechaEntregaInput = document.getElementById('fecha_hora_entrega');
+    const form = document.getElementById('minutaForm');
+
+    if (fechaReciboInput && fechaEntregaInput) {
+        // Establecer el valor mínimo permitido
+        fechaEntregaInput.min = fechaReciboInput.value;
+
+        // Validar cuando cambia el valor
+        fechaEntregaInput.addEventListener('change', function() {
+            if (this.value && this.value < fechaReciboInput.value) {
+                alert("La fecha y hora de entrega no puede ser anterior a la fecha y hora de recibido.");
+                this.value = fechaReciboInput.value;
+            }
+        });
+
+        // Validar al enviar el formulario
+        form.addEventListener('submit', function(e) {
+            if (fechaEntregaInput.value && fechaEntregaInput.value < fechaReciboInput.value) {
+                e.preventDefault();
+                alert("Error: La fecha y hora de entrega no puede ser anterior a la fecha y hora de recibido.");
+                fechaEntregaInput.focus();
+            }
+        });
     }
 });
 </script>
