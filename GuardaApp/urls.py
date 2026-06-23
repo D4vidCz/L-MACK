@@ -32,6 +32,7 @@ urlpatterns = [
     path("guarda/traslados/nuevo/", views.crear_traslado, name="guarda_traslado_crear"),
     path("guarda/traslados/<int:traslado_id>/editar/", views.editar_traslado, name="guarda_traslado_editar"),
     path("guarda/traslados/<int:traslado_id>/eliminar/", views.eliminar_traslado, name="guarda_traslado_eliminar"),
+    path("guarda/traslados/<int:traslado_id>/devolver/", views.devolver_recurso_guarda, name="guarda_traslado_devolver"),
     path("guarda/ambientes/", views.listar_ambientes, name="guarda_ambientes"),
     path("guarda/ambientes/descargar/excel/", views.exportar_ambientes_excel, name="guarda_ambientes_excel"),
     path("guarda/ambientes/descargar/pdf/", views.exportar_ambientes_pdf, name="guarda_ambientes_pdf"),

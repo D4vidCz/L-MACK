@@ -37,6 +37,7 @@ urlpatterns = [
     path("instructor/traslados/nuevo/", views.form_traslado, name="form_traslado"),
     path("instructor/traslados/<int:traslado_id>/editar/", views.editar_traslado, name="editar_traslado"),
     path("instructor/traslados/<int:traslado_id>/eliminar/", views.eliminar_traslado, name="eliminar_traslado"),
+    path("instructor/traslados/<int:traslado_id>/devolver/", views.devolver_recurso, name="devolver_recurso"),
     path("instructor/traslados/exportar/pdf/", views.exportar_traslados_pdf, name="exportar_traslados_pdf"),
     path("instructor/traslados/exportar/excel/", views.exportar_traslados_excel, name="exportar_traslados_excel"),
     path("instructor/ambientes/", views.listar_ambientes, name="listar_ambientes"),

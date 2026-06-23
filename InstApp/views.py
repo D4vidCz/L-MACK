@@ -824,12 +824,13 @@ def listar_traslados(request):
             "instructor_origen_nombre": instructor_origen,
             "instructor_destino_nombre": instructor_destino,
             "tiempo_prestamo": t.tiempo_prestamo or "—",
+            "estado": t.estado or "Prestado",
         })
 
     # Exportación PDF
     if request.GET.get('export') == 'pdf':
         response, buffer = generar_pdf_response("traslados.pdf")
-        cabeceras = ["ID", "Recurso", "Origen", "Destino", "Fecha", "Instructor Presta", "Instructor Recibe", "Duración", "Observación"]
+        cabeceras = ["ID", "Recurso", "Origen", "Destino", "Fecha", "Instructor Presta", "Instructor Recibe", "Duración", "Estado", "Observación"]
         filas = [[
             str(t["id_traslado"]),
             t["recurso_nombre"],
@@ -839,6 +840,7 @@ def listar_traslados(request):
             t["instructor_origen_nombre"],
             t["instructor_destino_nombre"],
             t["tiempo_prestamo"],
+            t["estado"],
             (t["observacion"] or "—")[:80],
         ] for t in traslados]
         construir_pdf(buffer, "Traslados de Recursos", cabeceras, filas)
@@ -848,7 +850,7 @@ def listar_traslados(request):
     # Exportación Excel
     if request.GET.get('export') == 'excel':
         response, wb, ws = generar_excel_response("traslados.xlsx")
-        cabeceras = ["ID", "Recurso", "Serial", "Ambiente Origen", "Ambiente Destino", "Fecha", "Instructor Presta", "Instructor Recibe", "Duración", "Observación"]
+        cabeceras = ["ID", "Recurso", "Serial", "Ambiente Origen", "Ambiente Destino", "Fecha", "Instructor Presta", "Instructor Recibe", "Duración", "Estado", "Observación"]
         filas = [[
             str(t["id_traslado"]),
             t["recurso_nombre"],
@@ -859,6 +861,7 @@ def listar_traslados(request):
             t["instructor_origen_nombre"],
             t["instructor_destino_nombre"],
             t["tiempo_prestamo"],
+            t["estado"],
             t["observacion"] or "—",
         ] for t in traslados]
         estilizar_excel(ws, cabeceras, filas, "Traslados de Recursos")
@@ -882,6 +885,20 @@ def form_traslado(request):
 
 
 def editar_traslado(request, traslado_id):
+    return redirect('instructor:listar_traslados')
+
+
+@require_POST
+@never_cache
+def devolver_recurso(request, traslado_id):
+    if not request.session.get('usuario_id'):
+        return redirect('login:login')
+    
+    traslado = get_object_or_404(TrasladoRecurso, pk=traslado_id)
+    traslado.estado = 'Devuelto'
+    traslado.save(update_fields=['estado'])
+    
+    messages.success(request, f"El recurso '{traslado.recurso.nombre_recurso}' ha sido marcado como Devuelto.")
     return redirect('instructor:listar_traslados')
 
 

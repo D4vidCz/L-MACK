@@ -306,7 +306,7 @@ def exportar_traslados_excel(request):
     wb = Workbook()
     ws = wb.active
     ws.title = "Traslados"
-    headers = ["ID", "Recurso", "Serial", "Origen", "Destino", "Fecha", "Instructor Presta", "Instructor Recibe", "Duracion", "Observacion"]
+    headers = ["ID", "Recurso", "Serial", "Origen", "Destino", "Fecha", "Instructor Presta", "Instructor Recibe", "Duracion", "Estado", "Observacion"]
     ws.append(headers)
     for col_idx in range(1, len(headers) + 1):
         c = ws.cell(row=1, column=col_idx)
@@ -326,6 +326,7 @@ def exportar_traslados_excel(request):
             instructor_origen,
             instructor_destino,
             t.tiempo_prestamo or "—",
+            t.estado or "Prestado",
             t.observacion or "",
         ])
 
@@ -350,7 +351,7 @@ def exportar_traslados_pdf(request):
     destinos_ids = {t.ambiente_destino for t in traslados if t.ambiente_destino}
     destinos_map = {a.id_ambiente: a.num_ambiente for a in Ambiente.objects.filter(id_ambiente__in=destinos_ids)}
 
-    headers = ["ID", "Recurso", "Serial", "Origen", "Destino", "Fecha", "Instructor Presta", "Instructor Recibe", "Duracion", "Observacion"]
+    headers = ["ID", "Recurso", "Serial", "Origen", "Destino", "Fecha", "Instructor Presta", "Instructor Recibe", "Duracion", "Estado", "Observacion"]
     rows = []
     for t in traslados:
         instructor_origen = f"{t.instructor_origen.usuario_id_usuario.p_nombre} {t.instructor_origen.usuario_id_usuario.p_apellido}".strip() if t.instructor_origen else "—"
@@ -365,12 +366,13 @@ def exportar_traslados_pdf(request):
             instructor_origen,
             instructor_destino,
             t.tiempo_prestamo or "—",
+            t.estado or "Prestado",
             (t.observacion or "")[:150],
         ])
 
     buf, doc, styles, elements = _pdf_doc("Reporte de Traslados", filtros, landscape_mode=True)
     data = _build_wrapped_pdf_data(headers, rows, styles, colors)
-    table = Table(data, repeatRows=1, colWidths=[1.0 * cm, 3.0 * cm, 2.5 * cm, 1.5 * cm, 1.5 * cm, 2.5 * cm, 3.5 * cm, 3.5 * cm, 2.0 * cm, 5.0 * cm])
+    table = Table(data, repeatRows=1, colWidths=[1.0 * cm, 2.5 * cm, 2.5 * cm, 1.3 * cm, 1.3 * cm, 2.4 * cm, 3.0 * cm, 3.0 * cm, 1.8 * cm, 1.8 * cm, 5.4 * cm])
     table.setStyle(_pdf_table_styles(colors))
     elements.append(table)
     doc.build(elements)

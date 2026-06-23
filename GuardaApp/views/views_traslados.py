@@ -218,3 +218,19 @@ def resolver_instructor_origen_ajax(request):
         })
 
     return JsonResponse({"success": False, "error": "No hay instructores asignados a este ambiente hoy."})
+
+
+@require_POST
+@never_cache
+def devolver_recurso_guarda(request, traslado_id):
+    _, denied = _acceso_guarda_o_login(request)
+    if denied:
+        return denied
+
+    traslado = get_object_or_404(TrasladoRecurso, pk=traslado_id)
+    traslado.estado = 'Devuelto'
+    traslado.save(update_fields=['estado'])
+
+    messages.success(request, f"El recurso '{traslado.recurso.nombre_recurso}' ha sido marcado como Devuelto.")
+    return _replace_redirect('guarda:guarda_traslados')
+

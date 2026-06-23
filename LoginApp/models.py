@@ -559,6 +559,7 @@ class TrasladoRecurso(models.Model):
         related_name='traslados_recibidos'
     )
     tiempo_prestamo = models.CharField(max_length=100, blank=True, null=True)
+    estado = models.CharField(max_length=20, default='Prestado')
 
     class Meta:
         managed = True

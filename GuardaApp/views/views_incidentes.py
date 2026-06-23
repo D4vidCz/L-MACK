@@ -199,40 +199,5 @@ def actualizar_estado_incidente(request, incidente_id):
     _, denied = _acceso_guarda_o_login(request)
     if denied:
         return denied
-    incidente = get_object_or_404(RegistroIncidente, pk=incidente_id)
-    if request.method == "POST":
-        nuevo_estado = request.POST.get("estado")
-        comentario = request.POST.get("comentario", "").strip()
-
-        if nuevo_estado in dict(RegistroIncidente.ESTADOS_INCIDENTE):
-            old_estado = incidente.estado
-            if old_estado != nuevo_estado:
-                incidente.estado = nuevo_estado
-                incidente.save()
-
-                if comentario:
-                    from LoginApp.models import HistoricoIncidentes
-                    latest_hist = HistoricoIncidentes.objects.filter(incidente=incidente).order_by('-id_historico').first()
-                    if latest_hist:
-                        latest_hist.descripcion = f"Cambio de estado: '{old_estado}' → '{nuevo_estado}'. Nota: {comentario}"
-                        latest_hist.save(update_fields=['descripcion'])
-
-                messages.success(request, f"Estado del incidente actualizado a {nuevo_estado}.")
-            else:
-                if comentario:
-                    from LoginApp.models import HistoricoIncidentes
-                    from django.utils import timezone
-                    HistoricoIncidentes.objects.create(
-                        incidente=incidente,
-                        ambiente=incidente.ambiente,
-                        tipo_incidente=incidente.tipo_inc,
-                        descripcion=f"Nota de seguimiento: {comentario}",
-                        fecha_registro=timezone.now()
-                    )
-                    messages.success(request, "Nota de seguimiento agregada correctamente.")
-                else:
-                    messages.info(request, "No se realizaron cambios.")
-        else:
-            messages.error(request, "Estado no válido.")
-
-    return redirect('guarda:guarda_incidente_detalle', incidente_id=incidente.id_incidente)
+    messages.error(request, "Los guardas de seguridad no tienen permiso para modificar el seguimiento de los incidentes.")
+    return redirect('guarda:guarda_incidente_detalle', incidente_id=incidente_id)
