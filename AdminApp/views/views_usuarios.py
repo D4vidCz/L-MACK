@@ -436,10 +436,22 @@ def editar_usuario(request, usuario_id):
         if password:
             u.contrasena = _hash_nueva_contrasena(password)
 
-        # Determinar si el rol cambió
+        # Determinar si el rol cambió o se asignó por primera vez, o si no tiene perfil creado
         role_changed = False
-        if rol_actual and rol_id != rol_actual:
+        if not rol_actual or rol_id != rol_actual:
             role_changed = True
+        else:
+            # Si el rol es el mismo pero no tiene perfil en la BD
+            rol = Rol.objects.get(pk=rol_id)
+            nombre_rol = rol.nombre_rol.lower()
+            if "aprendiz" in nombre_rol and not Aprendiz.objects.filter(usuario_id_usuario=u).exists():
+                role_changed = True
+            elif "instructor" in nombre_rol and not Instructor.objects.filter(usuario_id_usuario=u).exists():
+                role_changed = True
+            elif "guarda" in nombre_rol and not GuardaSeguridad.objects.filter(usuario_id_usuario=u).exists():
+                role_changed = True
+            elif ("admin" in nombre_rol or "coordinador" in nombre_rol) and not Coordinador.objects.filter(usuario_id_usuario=u).exists():
+                role_changed = True
 
         try:
             with transaction.atomic():
@@ -611,6 +623,23 @@ def importar_usuarios_csv(request):
                 correo_val  = (fila.get('correo') or '').strip()
                 rol_val     = (fila.get('rol') or '').strip().lower()
 
+                # Normalizar rol
+                if rol_val in ('guarda', 'guarda de seguridad', 'guardaseguridad', 'vigilante'):
+                    rol_norm = 'guarda'
+                    db_rol_name = 'Guarda de Seguridad'
+                elif rol_val in ('aprendiz', 'alumno', 'estudiante'):
+                    rol_norm = 'aprendiz'
+                    db_rol_name = 'Aprendiz'
+                elif rol_val in ('instructor', 'profesor', 'docente'):
+                    rol_norm = 'instructor'
+                    db_rol_name = 'Instructor'
+                elif rol_val in ('coordinador', 'admin', 'administrador'):
+                    rol_norm = 'coordinador'
+                    db_rol_name = 'Administrador'
+                else:
+                    rol_norm = rol_val
+                    db_rol_name = rol_val
+
                 if not num_doc_raw or not correo_val:
                     errores.append(f"Fila {i}: num_documento o correo vacíos.")
                     continue
@@ -644,12 +673,12 @@ def importar_usuarios_csv(request):
                     )
 
                     # Asignar rol
-                    rol_obj = Rol.objects.filter(nombre_rol__iexact=rol_val).first()
+                    rol_obj = Rol.objects.filter(nombre_rol__iexact=db_rol_name).first()
                     if rol_obj:
                         UserRol.objects.create(id_usuario=usuario, id_rol=rol_obj)
 
                     # Crear perfil según rol
-                    if rol_val == 'aprendiz':
+                    if rol_norm == 'aprendiz':
                         ficha_id = (fila.get('num_ficha') or '').strip()
                         ficha_obj = None
                         if ficha_id:
@@ -669,7 +698,7 @@ def importar_usuarios_csv(request):
                             programas_id_programas=programa_obj,
                         )
 
-                    elif rol_val == 'instructor':
+                    elif rol_norm == 'instructor':
                         coord_raw = (fila.get('coordinacion_id') or fila.get('coordinacion') or fila.get('coordinación') or '').strip()
                         coord_obj = None
                         if coord_raw:
@@ -690,7 +719,7 @@ def importar_usuarios_csv(request):
                             estado=estado_raw,
                         )
 
-                    elif rol_val in ('guarda', 'guarda de seguridad'):
+                    elif rol_norm == 'guarda':
                         from LoginApp.models import GuardaSeguridad
                         from django.utils import timezone as tz
                         from datetime import datetime
@@ -718,7 +747,7 @@ def importar_usuarios_csv(request):
                             estado=estado_raw,
                         )
 
-                    elif rol_val in ('coordinador', 'admin', 'administrador'):
+                    elif rol_norm == 'coordinador':
                         coord_raw = (fila.get('coordinacion_id') or fila.get('coordinacion') or fila.get('coordinación') or '').strip()
                         coord_obj = None
                         if coord_raw:
