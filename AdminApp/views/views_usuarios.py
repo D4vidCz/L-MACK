@@ -697,7 +697,15 @@ def importar_usuarios_csv(request):
                             try:
                                 programa_obj = Programas.objects.filter(pk=int(programa_raw)).first()
                             except ValueError:
-                                programa_obj = Programas.objects.filter(nombre_programa__icontains=programa_raw).first()
+                                # Búsqueda flexible por palabras para solucionar inconsistencias de caracteres especiales/tildes
+                                words = [w for w in programa_raw.split() if len(w) > 3]
+                                if words:
+                                    query = Q()
+                                    for w in words:
+                                        query |= Q(nombre_programa__icontains=w)
+                                    programa_obj = Programas.objects.filter(query).first()
+                                else:
+                                    programa_obj = Programas.objects.filter(nombre_programa__icontains=programa_raw).first()
                                 
                         Aprendiz.objects.create(
                             usuario_id_usuario=usuario,
@@ -712,7 +720,15 @@ def importar_usuarios_csv(request):
                             try:
                                 coord_obj = Coordinacion.objects.filter(pk=int(coord_raw)).first()
                             except ValueError:
-                                coord_obj = Coordinacion.objects.filter(nombre_coordinacion__icontains=coord_raw).first()
+                                # Búsqueda flexible por palabras para solucionar inconsistencias de caracteres especiales/tildes
+                                words = [w for w in coord_raw.split() if len(w) > 3]
+                                if words:
+                                    query = Q()
+                                    for w in words:
+                                        query |= Q(nombre_coordinacion__icontains=w)
+                                    coord_obj = Coordinacion.objects.filter(query).first()
+                                else:
+                                    coord_obj = Coordinacion.objects.filter(nombre_coordinacion__icontains=coord_raw).first()
                         
                         estado_raw = (fila.get('estado') or '').strip().capitalize()
                         if estado_raw not in ('Activo', 'Inactivo'):
@@ -761,7 +777,15 @@ def importar_usuarios_csv(request):
                             try:
                                 coord_obj = Coordinacion.objects.filter(pk=int(coord_raw)).first()
                             except ValueError:
-                                coord_obj = Coordinacion.objects.filter(nombre_coordinacion__icontains=coord_raw).first()
+                                # Búsqueda flexible por palabras para solucionar inconsistencias de caracteres especiales/tildes
+                                words = [w for w in coord_raw.split() if len(w) > 3]
+                                if words:
+                                    query = Q()
+                                    for w in words:
+                                        query |= Q(nombre_coordinacion__icontains=w)
+                                    coord_obj = Coordinacion.objects.filter(query).first()
+                                else:
+                                    coord_obj = Coordinacion.objects.filter(nombre_coordinacion__icontains=coord_raw).first()
 
                         Coordinador.objects.create(
                             usuario_id_usuario=usuario,
