@@ -134,6 +134,9 @@ def editar_incidente(request, incidente_id):
     if denied:
         return denied
     incidente = get_object_or_404(RegistroIncidente, pk=incidente_id)
+    if incidente.estado == 'Cerrado':
+        messages.error(request, "Este incidente ya está cerrado y no permite ediciones.")
+        return redirect('guarda:guarda_incidentes')
     ambientes = Ambiente.objects.all().order_by("num_ambiente")
     tipos = TipoIncidente.objects.all().order_by("tipo_incidente")
 
@@ -166,15 +169,10 @@ def eliminar_incidente(request, incidente_id):
     _, denied = _acceso_guarda_o_login(request)
     if denied:
         return denied
-
-
-@require_POST
-@never_cache
-def eliminar_incidente(request, incidente_id):
-    _, denied = _acceso_guarda_o_login(request)
-    if denied:
-        return denied
     incidente = get_object_or_404(RegistroIncidente, pk=incidente_id)
+    if incidente.estado == 'Cerrado':
+        messages.error(request, "Este incidente ya está cerrado y no puede ser eliminado.")
+        return redirect('guarda:guarda_incidentes')
     incidente.delete()
     messages.success(request, "Incidente eliminado correctamente.")
     return _replace_redirect('guarda:guarda_incidentes')

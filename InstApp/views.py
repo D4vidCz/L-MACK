@@ -695,6 +695,9 @@ def form_incidente(request):
 
 def editar_incidente(request, incidente_id):
     incidente = get_object_or_404(RegistroIncidente, pk=incidente_id)
+    if incidente.estado == 'Cerrado':
+        messages.error(request, "Este incidente ya está cerrado y no permite ediciones.")
+        return redirect('instructor:listar_incidentes')
     uid = request.session.get('usuario_id')
 
     from LoginApp.models import AsignacionAmbiente, Instructor
@@ -749,6 +752,9 @@ def editar_incidente(request, incidente_id):
 @require_POST
 def eliminar_incidente(request, incidente_id):
     incidente = get_object_or_404(RegistroIncidente, pk=incidente_id)
+    if incidente.estado == 'Cerrado':
+        messages.error(request, "Este incidente ya está cerrado y no puede ser eliminado.")
+        return redirect('instructor:listar_incidentes')
     # Eliminamos el historial relacionado para evitar IntegrityError (Constraint FK)
     HistoricoIncidentes.objects.filter(incidente=incidente).delete()
     incidente.delete()
@@ -1263,6 +1269,9 @@ def detalle_incidente(request, incidente_id):
 @rol_requerido(['instructor'])
 def actualizar_estado_incidente(request, incidente_id):
     incidente = get_object_or_404(RegistroIncidente, pk=incidente_id)
+    if incidente.estado == 'Cerrado':
+        messages.error(request, "Este incidente ya está cerrado y no permite modificaciones ni reaperturas.")
+        return redirect('instructor:detalle_incidente', incidente_id=incidente_id)
     if request.method == "POST":
         nuevo_estado = request.POST.get("estado")
         comentario = request.POST.get("comentario", "").strip()

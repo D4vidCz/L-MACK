@@ -153,25 +153,33 @@
 
                 <!-- Columna de Registrar Seguimiento -->
                 <div class="col-md-5">
-                    <div class="card shadow-sm border-0 p-4" style="background-color: #f8fafc; border: 1px solid #e2e8f0 !important;">
-                        <h4 class="mb-3" style="font-size: 18px; color: #1e293b;">✍️ Registrar Seguimiento / Estado</h4>
-                        <form method="post" action="{% url 'instructor:actualizar_estado_incidente' incidente.id_incidente %}">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="estado" class="form-label fw-bold small text-muted">CAMBIAR ESTADO</label>
-                                <select name="estado" id="estado" class="form-select form-select-sm">
-                                    <option value="Abierto" {% if incidente.estado == 'Abierto' %}selected{% endif %}>Abierto</option>
-                                    <option value="En Proceso" {% if incidente.estado == 'En Proceso' %}selected{% endif %}>En Proceso</option>
-                                    <option value="Cerrado" {% if incidente.estado == 'Cerrado' %}selected{% endif %}>Cerrado</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="comentario" class="form-label fw-bold small text-muted">AÑADIR COMENTARIO O NOTA</label>
-                                <textarea name="comentario" id="comentario" rows="3" class="form-control form-control-sm" placeholder="Escribe detalles del avance o acción tomada..."></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">Actualizar Seguimiento</button>
-                        </form>
-                    </div>
+                    {% if incidente.estado == 'Cerrado' %}
+                        <div class="card shadow-sm border-0 p-4 text-center" style="background-color: #f0fdf4; border: 1px solid #bbf7d0 !important;">
+                            <div class="fs-1 mb-2">✅</div>
+                            <h4 style="font-size: 18px; color: #166534;" class="mb-2">Incidente Resuelto</h4>
+                            <p class="text-muted small mb-0">Este incidente ha sido cerrado y solucionado. No se permiten más modificaciones ni registros de seguimiento.</p>
+                        </div>
+                    {% else %}
+                        <div class="card shadow-sm border-0 p-4" style="background-color: #f8fafc; border: 1px solid #e2e8f0 !important;">
+                            <h4 class="mb-3" style="font-size: 18px; color: #1e293b;">✍️ Registrar Seguimiento / Estado</h4>
+                            <form method="post" action="{% url 'instructor:actualizar_estado_incidente' incidente.id_incidente %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="estado" class="form-label fw-bold small text-muted">CAMBIAR ESTADO</label>
+                                    <select name="estado" id="estado" class="form-select form-select-sm">
+                                        <option value="Abierto" {% if incidente.estado == 'Abierto' %}selected{% endif %}>Abierto</option>
+                                        <option value="En Proceso" {% if incidente.estado == 'En Proceso' %}selected{% endif %}>En Proceso</option>
+                                        <option value="Cerrado" {% if incidente.estado == 'Cerrado' %}selected{% endif %}>Cerrado</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="comentario" class="form-label fw-bold small text-muted">AÑADIR COMENTARIO O NOTA</label>
+                                    <textarea name="comentario" id="comentario" rows="3" class="form-control form-control-sm" placeholder="Escribe detalles del avance o acción tomada..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">Actualizar Seguimiento</button>
+                            </form>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 

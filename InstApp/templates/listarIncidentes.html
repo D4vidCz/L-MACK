@@ -164,6 +164,7 @@
                         <td>
                             <a href="{% url 'instructor:detalle_incidente' inc.id_incidente %}"
                                class="btn btn-sm btn-outline-primary">🔍</a>
+                            {% if inc.estado != 'Cerrado' %}
                             <a href="{% url 'instructor:editar_incidente' inc.id_incidente %}"
                                class="btn btn-sm btn-secondary">✏️</a>
                             <form method="post" action="{% url 'instructor:eliminar_incidente' inc.id_incidente %}"
@@ -172,6 +173,7 @@
                                 <button class="btn btn-sm btn-danger"
                                         onclick="return confirm('¿Eliminar incidente?');">🗑️</button>
                             </form>
+                            {% endif %}
                         </td>
                     </tr>
                     {% empty %}
