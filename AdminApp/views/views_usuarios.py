@@ -194,8 +194,9 @@ def form_usuario(request):
 
 def crear_aprendiz_detalle(request, usuario_id):
     usuario = get_object_or_404(Usuario, pk=usuario_id)
+    instance = Aprendiz.objects.filter(usuario_id_usuario=usuario).first()
     if request.method == "POST":
-        form = AprendizForm(request.POST)
+        form = AprendizForm(request.POST, instance=instance)
         if form.is_valid():
             aprendiz = form.save(commit=False)
             aprendiz.usuario_id_usuario = usuario
@@ -203,13 +204,14 @@ def crear_aprendiz_detalle(request, usuario_id):
             messages.success(request, "Datos de Aprendiz guardados correctamente.")
             return redirect('admin_panel:listar_usuarios')
     else:
-        form = AprendizForm()
+        form = AprendizForm(instance=instance)
     return _render_admin(request, "formAprendiz.html", {"form": form, "usuario": usuario})
 
 def crear_instructor_detalle(request, usuario_id):
     usuario = get_object_or_404(Usuario, pk=usuario_id)
+    instance = Instructor.objects.filter(usuario_id_usuario=usuario).first()
     if request.method == "POST":
-        form = InstructorForm(request.POST)
+        form = InstructorForm(request.POST, instance=instance)
         if form.is_valid():
             instructor = form.save(commit=False)
             instructor.usuario_id_usuario = usuario
@@ -217,13 +219,14 @@ def crear_instructor_detalle(request, usuario_id):
             messages.success(request, "Datos de Instructor guardados correctamente.")
             return redirect('admin_panel:listar_usuarios')
     else:
-        form = InstructorForm()
+        form = InstructorForm(instance=instance)
     return _render_admin(request, "formInstructorDetalle.html", {"form": form, "usuario": usuario})
 
 def crear_guarda_detalle(request, usuario_id):
     usuario = get_object_or_404(Usuario, pk=usuario_id)
+    instance = GuardaSeguridad.objects.filter(usuario_id_usuario=usuario).first()
     if request.method == "POST":
-        form = GuardaForm(request.POST)
+        form = GuardaForm(request.POST, instance=instance)
         if form.is_valid():
             guarda = form.save(commit=False)
             guarda.usuario_id_usuario = usuario
@@ -231,13 +234,14 @@ def crear_guarda_detalle(request, usuario_id):
             messages.success(request, "Datos de Guarda guardados correctamente.")
             return redirect('admin_panel:listar_usuarios')
     else:
-        form = GuardaForm()
+        form = GuardaForm(instance=instance)
     return _render_admin(request, "formGuardaDetalle.html", {"form": form, "usuario": usuario})
 
 def crear_coordinador_detalle(request, usuario_id):
     usuario = get_object_or_404(Usuario, pk=usuario_id)
+    instance = Coordinador.objects.filter(usuario_id_usuario=usuario).first()
     if request.method == "POST":
-        form = CoordinadorForm(request.POST)
+        form = CoordinadorForm(request.POST, instance=instance)
         if form.is_valid():
             coordinador = form.save(commit=False)
             coordinador.usuario_id_usuario = usuario
@@ -245,7 +249,7 @@ def crear_coordinador_detalle(request, usuario_id):
             messages.success(request, "Datos de Coordinador guardados correctamente.")
             return redirect('admin_panel:listar_usuarios')
     else:
-        form = CoordinadorForm()
+        form = CoordinadorForm(instance=instance)
     return _render_admin(request, "formCoordinadorDetalle.html", {"form": form, "usuario": usuario})
 
 
@@ -490,18 +494,21 @@ def editar_usuario(request, usuario_id):
                 },
             )
 
+        rol = Rol.objects.get(pk=rol_id)
+        nombre_rol = rol.nombre_rol.lower()
         if role_changed:
-            rol = Rol.objects.get(pk=rol_id)
-            nombre_rol = rol.nombre_rol.lower()
             messages.success(request, f"Se actualizó el usuario. Por favor complete los detalles para el nuevo rol de {rol.nombre_rol}.")
-            if "aprendiz" in nombre_rol:
-                return redirect('admin_panel:crear_aprendiz_detalle', usuario_id=u.id_usuario)
-            elif "instructor" in nombre_rol:
-                return redirect('admin_panel:crear_instructor_detalle', usuario_id=u.id_usuario)
-            elif "guarda" in nombre_rol:
-                return redirect('admin_panel:crear_guarda_detalle', usuario_id=u.id_usuario)
-            elif "admin" in nombre_rol or "coordinador" in nombre_rol:
-                return redirect('admin_panel:crear_coordinador_detalle', usuario_id=u.id_usuario)
+        else:
+            messages.success(request, f"Se actualizó el usuario. A continuación puede modificar los detalles del rol ({rol.nombre_rol}) si lo requiere.")
+
+        if "aprendiz" in nombre_rol:
+            return redirect('admin_panel:crear_aprendiz_detalle', usuario_id=u.id_usuario)
+        elif "instructor" in nombre_rol:
+            return redirect('admin_panel:crear_instructor_detalle', usuario_id=u.id_usuario)
+        elif "guarda" in nombre_rol:
+            return redirect('admin_panel:crear_guarda_detalle', usuario_id=u.id_usuario)
+        elif "admin" in nombre_rol or "coordinador" in nombre_rol:
+            return redirect('admin_panel:crear_coordinador_detalle', usuario_id=u.id_usuario)
 
         messages.success(request, "Usuario actualizado correctamente.")
         return redirect('admin_panel:listar_usuarios')
